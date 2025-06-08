@@ -40,7 +40,7 @@ int Train::getLength() {
             walkerr = walkerr->next;
             ++countOp;
         }
-        Car* checkerr = walkerr;
+        const Car* checkerr = walkerr;
         // Вернуться назад на steps шагов
         for (int i = 0; i < stepss; ++i) {
             checkerr = checkerr->prev;
