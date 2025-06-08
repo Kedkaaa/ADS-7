@@ -24,35 +24,31 @@ int Train::getLength() {
     Car* currentt = first;
 
     // Включаем лампу в начальном вагоне
-    currentt->light = true;
+    currentt->light = false;
 
     int maxSteps = 1000000; // защита от бесконечного цикла
 
     while (maxSteps-- > 0) {
-        int stepss = 0;
+        int stepss = 1;
         Car* walkerr = currentt->next;
-        countOp++;
+        ++countOp;
 
         // Идём вперёд до включённой лампочки
-        while (!walkerr->light) {
-            stepss++;
+        while (walkerr->light) {
+            ++stepss;
             walkerr = walkerr->next;
-            countOp++;
+            ++countOp;
         }
 
         // Вернуться назад на steps шагов
-        Car* checkerr = walkerr;
         for (int i = 0; i < stepss; ++i) {
-            checkerr = checkerr->prev;
-            countOp++;
+            walkerr = walkerr->prev;
+            ++countOp;
         }
 
         // если лампочка погасла обошли полный круг длина найдена
-        if (!checkerr->light)
-            return stepss + 1;
-        // иначе — продолжаем обход
-        else
-            currentt = currentt->next;
+        if (!walkerr->light)
+            return stepss;
     }
     std::cerr << "Ошибка: превышен лимит шагов. Возможен бесконечный цикл.\n";
     return -1; // ошибка
