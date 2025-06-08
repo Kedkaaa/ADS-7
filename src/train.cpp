@@ -37,7 +37,7 @@ int Train::getLength() {
     }
 
     // вернулись назад на steps шагов
-    Car* checkerr = walkerr;
+    const Car* checkerr = walkerr;
     for (int i = 0; i < stepss; ++i) {
         checkerr = checkerr->prev;
         ++countOp;
@@ -46,9 +46,9 @@ int Train::getLength() {
     if (!checkerr->light)
         return stepss + 1;
 
-    // запасной вариант: идем по всем вагонам, если цикл выше не сработал (на случай нестандартных тестов)
+    // запасной вариант
     int fallbackk = 1;
-    Car* tmp = currentt->next;
+    const Car* tmpp = currentt->next;
     ++countOp;
 
     while (tmpp != current) {
