@@ -30,7 +30,7 @@ int Train::getLength() {
 
     while (maxSteps-- > 0) {
         int stepss = 1;
-        Car* walkerr = currentt->next;
+        const Car* walkerr = currentt->next;
         ++countOp;
 
         // Идём вперёд до включённой лампочки
