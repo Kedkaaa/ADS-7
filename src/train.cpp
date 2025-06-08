@@ -22,39 +22,42 @@ int Train::getLength() {
     if (!first) return 0;
     countOp = 0;
 
-    Car* currentt = first;
-    bool originalLight = currentt->light;
-    currentt->light = false;
+    Car* start = first;
+    bool originalLight = start->light;
+    start->light = false;
     ++countOp;
 
-    int stepss = 0;
-    Car* walkerr = currentt->next;
+    Car* currentt = start->next;
+    int stepss = 1;
+    ++countOp;
 
     // Идем вперед, пока не встретим выключенную лампу
-    while (walkerr->light) {
+    while (currentt != start && currentt->light) {
         ++stepss;
-        walkerr = walkerr->next;
+        currentt = currentt->next;
         ++countOp;
     }
 
-    // вернулись назад на steps шагов
-    const Car* checkerr = walkerr;
+    // Вернуться назад на steps шагов
+    Car* back = currentt;
     for (int i = 0; i < stepss; ++i) {
-        checkerr = checkerr->prev;
+        back = back->prev;
         ++countOp;
     }
-    currentt->light = originalLight;
-    if (!checkerr->light)
-        return stepss + 1;
 
-    // запасной вариант
+    // Вернём лампочку в исходное состояние
+    start->light = originalLight;
+
+    if (back == start)
+        return stepss;
+    
+    // fallback — медленный способ (по кольцу, если что-то пошло не так)
     int fallbackk = 1;
-    const Car* tmpp = currentt->next;
+    Car* tempp = start->next;
     ++countOp;
-
-    while (tmpp != currentt) {
+    while (tempp != start) {
         ++fallbackk;
-        tmpp = tmpp->next;
+        tempp = tempp->next;
         ++countOp;
     }
 
