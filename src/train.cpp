@@ -23,6 +23,7 @@ int Train::getLength() {
     countOp = 0;
 
     Car* currentt = first;
+    bool originalLight = currentt->light;
     currentt->light = false;
     ++countOp;
 
@@ -42,7 +43,7 @@ int Train::getLength() {
         checkerr = checkerr->prev;
         ++countOp;
     }
-
+    currentt->light = originalLight;
     if (!checkerr->light)
         return stepss + 1;
 
