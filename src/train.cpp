@@ -21,39 +21,46 @@ void Train::addCar(bool light) {
 int Train::getLength() {
     if (!first) return 0;
     countOp = 0;
-    Car* currentt = first;
+    const Car* currentt = first;
 
-    int maxSteps = 1000000; // защита от бесконечного цикла
+    // Защита от бесконечного цикла
+    const int maxIterations = 1'000'000;
 
-    while (maxSteps-- > 0) {
+    for (int iter = 0; iter < maxIterations; ++iter) {
+        // 1. Выключаем лампу в текущем вагоне
         currentt->light = false;
-        int stepss = 0;
+
+        // 2. Идём вперёд, пока не встретим выключенную лампу
         const Car* walkerr = currentt->next;
+        int stepss = 1; // начинаем с 1, потому что уже сдвинулись от текущего
         countOp++;
 
-        // Идём вперёд до включённой лампочки
         while (walkerr->light) {
             walkerr = walkerr->next;
             stepss++;
             countOp++;
         }
-        const Car* checkerr = walkerr;
-        // Вернуться назад на steps шагов
+
+        // 3. Возвращаемся назад на steps шагов
+        Car* checkerr = walkerr;
         for (int i = 0; i < stepss; ++i) {
             checkerr = checkerr->prev;
             countOp++;
         }
 
-        if (!checkerr->light)
+        // 4. Проверяем, погашена ли лампа на исходном вагоне
+        if (!checkerr->light) {
             return stepss + 1;
+        }
 
-        // иначе — продолжаем с нового вагона, выключив свет здесь
+        // Иначе — включаем обратно и идём на следующий вагон
         currentt->light = true;
         currentt = currentt->next;
         countOp++;
     }
+
     std::cerr << "Ошибка: превышен лимит шагов. Возможен бесконечный цикл.\n";
-    return -1; // ошибка
+    return -1;    
 }
 int Train::getOpCount() {
     return countOp;
