@@ -51,8 +51,8 @@ int Train::getLength() {
     const Car* tmpp = currentt->next;
     ++countOp;
 
-    while (tmpp != current) {
-        ++fallback;
+    while (tmpp != currentt) {
+        ++fallbackk;
         tmpp = tmpp->next;
         ++countOp;
     }
